@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from app.models import Action, ActionType, Log, AlertHistory
 from app.actions.email import EmailActionHandler
 from app.actions.webhook import WebhookActionHandler
+from app.actions.google_chat import GoogleChatActionHandler
 from app.utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -19,6 +20,7 @@ class ActionHandlerService:
         self.handlers = {
             ActionType.EMAIL: EmailActionHandler(),
             ActionType.WEBHOOK: WebhookActionHandler(),
+            ActionType.GOOGLE_CHAT: GoogleChatActionHandler(),
         }
 
     def execute_action(self, db: Session, action: Action, log: Log) -> bool:

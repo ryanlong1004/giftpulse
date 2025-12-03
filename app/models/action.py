@@ -15,6 +15,7 @@ class ActionType(str, enum.Enum):
 
     EMAIL = "email"
     WEBHOOK = "webhook"
+    GOOGLE_CHAT = "google_chat"
     LOG = "log"
 
 
