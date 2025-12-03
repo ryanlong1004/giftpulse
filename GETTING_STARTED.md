@@ -7,6 +7,7 @@ The GiftPulse Twilio Log Monitor has been successfully built out with all core P
 ## ✅ What's Been Implemented
 
 ### 1. **Project Setup** ✓
+
 - Complete directory structure following best practices
 - Python dependencies configured in `requirements.txt`
 - Environment configuration with `.env.example`
@@ -14,6 +15,7 @@ The GiftPulse Twilio Log Monitor has been successfully built out with all core P
 - Comprehensive `README.md` documentation
 
 ### 2. **Database Layer** ✓
+
 - SQLAlchemy models for all entities:
   - `Log` - Stores Twilio logs (calls, messages, alerts)
   - `MonitoringRule` - Configurable pattern matching rules
@@ -24,16 +26,18 @@ The GiftPulse Twilio Log Monitor has been successfully built out with all core P
 - Support for PostgreSQL with JSONB for flexible data storage
 
 ### 3. **Twilio Integration** ✓
+
 - `TwilioClientWrapper` class for API interactions
 - Methods to fetch:
   - Call logs
-  - Message logs  
+  - Message logs
   - Monitor alerts
 - Pagination handling for large datasets
 - Error handling with retries
 - Singleton pattern for efficient resource usage
 
 ### 4. **Log Fetcher Service** ✓
+
 - `LogFetcherService` for polling Twilio API
 - Automatic deduplication using `twilio_sid`
 - Stores logs with full metadata
@@ -41,6 +45,7 @@ The GiftPulse Twilio Log Monitor has been successfully built out with all core P
 - Incremental fetching (only new logs)
 
 ### 5. **Pattern Matching Engine** ✓
+
 - `PatternMatcher` with support for:
   - **Error Code Matching** - Match specific Twilio error codes
   - **Regex Patterns** - Flexible text pattern matching
@@ -50,6 +55,7 @@ The GiftPulse Twilio Log Monitor has been successfully built out with all core P
 - Triggers appropriate actions when patterns match
 
 ### 6. **Action Handler System** ✓
+
 - Base action handler interface
 - **Email Action Handler**:
   - SMTP support with TLS
@@ -64,6 +70,7 @@ The GiftPulse Twilio Log Monitor has been successfully built out with all core P
 - Action execution tracking in `AlertHistory`
 
 ### 7. **Celery Task Queue** ✓
+
 - Celery app configured with Redis backend
 - **Periodic Task**: `poll_twilio_logs`
   - Runs every 5 minutes (configurable)
@@ -75,6 +82,7 @@ The GiftPulse Twilio Log Monitor has been successfully built out with all core P
 - Task scheduling with Celery Beat
 
 ### 8. **REST API** ✓
+
 - FastAPI application with:
   - **Log Endpoints**:
     - `GET /api/logs` - List logs with pagination and filtering
@@ -98,6 +106,7 @@ The GiftPulse Twilio Log Monitor has been successfully built out with all core P
 - Request logging middleware
 
 ### 9. **Docker Infrastructure** ✓
+
 - **Dockerfile** for application container
 - **docker-compose.yml** with services:
   - PostgreSQL database
@@ -110,6 +119,7 @@ The GiftPulse Twilio Log Monitor has been successfully built out with all core P
 - Network configuration
 
 ### 10. **Utilities & Helpers** ✓
+
 - Structured JSON logging
 - Helper functions:
   - Error code parsing
@@ -122,6 +132,7 @@ The GiftPulse Twilio Log Monitor has been successfully built out with all core P
 ## 🚀 Quick Start Guide
 
 ### Prerequisites
+
 ```bash
 # Install dependencies
 pip install -r requirements.txt
@@ -133,6 +144,7 @@ docker-compose up -d
 ### Configuration
 
 1. **Copy environment template**:
+
    ```bash
    cp .env.example .env
    ```
@@ -150,6 +162,7 @@ docker-compose up -d
 ### Running the Application
 
 #### Option 1: Docker (Recommended)
+
 ```bash
 # Start all services
 docker-compose up -d
@@ -162,6 +175,7 @@ docker-compose down
 ```
 
 #### Option 2: Local Development
+
 ```bash
 # Terminal 1: Start Redis
 redis-server
@@ -294,6 +308,7 @@ curl http://localhost:8000/api/alerts?page=1&page_size=50
 See `PROJECT_PLAN.md` for detailed schema documentation.
 
 Key tables:
+
 - `logs` - Twilio log storage
 - `monitoring_rules` - Pattern matching configuration
 - `actions` - Action definitions
@@ -326,12 +341,14 @@ open htmlcov/index.html
 ## 📚 Next Steps
 
 ### Immediate (Ready to Use):
+
 1. Configure your Twilio credentials in `.env`
 2. Start the services with `docker-compose up`
 3. Create monitoring rules via API
 4. Watch logs being processed automatically!
 
 ### Future Enhancements (From PROJECT_PLAN.md):
+
 - Web dashboard for visual monitoring
 - SMS notifications via Twilio
 - Slack integration
@@ -344,16 +361,19 @@ open htmlcov/index.html
 ## 🐛 Troubleshooting
 
 ### Logs not appearing
+
 - Check Twilio credentials in `.env`
 - Verify Celery worker is running: `docker-compose logs celery-worker`
 - Check Celery beat scheduler: `docker-compose logs celery-beat`
 
 ### Email not sending
+
 - Verify SMTP configuration
 - Check for 2FA/app-specific password requirements
 - Review application logs for SMTP errors
 
 ### Database connection errors
+
 - Ensure PostgreSQL is running
 - Verify `DATABASE_URL` in `.env`
 - Check network connectivity in Docker

@@ -1,4 +1,5 @@
 """Pytest configuration."""
+
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -21,9 +22,7 @@ def test_db_engine():
 def test_db(test_db_engine):
     """Create test database session."""
     TestingSessionLocal = sessionmaker(
-        autocommit=False,
-        autoflush=False,
-        bind=test_db_engine
+        autocommit=False, autoflush=False, bind=test_db_engine
     )
     db = TestingSessionLocal()
     try:
@@ -36,13 +35,13 @@ def test_db(test_db_engine):
 def sample_log_data():
     """Sample log data for testing."""
     return {
-        'sid': 'CA1234567890abcdef1234567890abcdef',
-        'from': '+12345678901',
-        'to': '+19876543210',
-        'status': 'completed',
-        'duration': 120,
-        'start_time': '2024-01-01T12:00:00Z',
-        'end_time': '2024-01-01T12:02:00Z',
-        'error_code': None,
-        'error_message': None,
+        "sid": "CA1234567890abcdef1234567890abcdef",
+        "from": "+12345678901",
+        "to": "+19876543210",
+        "status": "completed",
+        "duration": 120,
+        "start_time": "2024-01-01T12:00:00Z",
+        "end_time": "2024-01-01T12:02:00Z",
+        "error_code": None,
+        "error_message": None,
     }

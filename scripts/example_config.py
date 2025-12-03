@@ -26,20 +26,18 @@ To: {{ to_number }}
 Twilio SID: {{ twilio_sid }}
 
 Please investigate this issue immediately.
-                """
-            }
+                """,
+            },
         },
         {
             "type": "webhook",
             "config": {
                 "url": "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK",
                 "method": "POST",
-                "headers": {
-                    "Content-Type": "application/json"
-                }
-            }
-        }
-    ]
+                "headers": {"Content-Type": "application/json"},
+            },
+        },
+    ],
 }
 
 example_threshold_rule = {
@@ -65,10 +63,10 @@ A threshold of 10 errors in 5 minutes has been exceeded.
 This indicates a potential system-wide issue that requires immediate attention.
 
 Please check the Twilio dashboard and application logs.
-                """
-            }
+                """,
+            },
         }
-    ]
+    ],
 }
 
 example_message_failure_rule = {
@@ -84,20 +82,17 @@ example_message_failure_rule = {
             "config": {
                 "recipients": ["sms-team@example.com"],
                 "subject": "SMS Delivery Failure",
-            }
+            },
         },
         {
             "type": "webhook",
             "config": {
                 "url": "https://your-incident-management-system.com/webhooks/twilio",
                 "method": "POST",
-                "data": {
-                    "severity": "medium",
-                    "service": "twilio-sms"
-                }
-            }
-        }
-    ]
+                "data": {"severity": "medium", "service": "twilio-sms"},
+            },
+        },
+    ],
 }
 
 example_regex_rule = {
@@ -112,8 +107,8 @@ example_regex_rule = {
             "type": "email",
             "config": {
                 "recipients": ["devops@example.com"],
-                "subject": "Network-related Twilio Error Detected"
-            }
+                "subject": "Network-related Twilio Error Detected",
+            },
         }
-    ]
+    ],
 }
