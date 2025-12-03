@@ -32,51 +32,60 @@ A monitoring application that continuously monitors Twilio account logs, detects
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd giftpulse
    ```
 
 2. **Create and activate virtual environment**
+
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
 3. **Install dependencies**
+
    ```bash
    pip install -r requirements.txt
    ```
 
 4. **Configure environment variables**
+
    ```bash
    cp .env.example .env
    # Edit .env with your configuration
    ```
 
 5. **Set up the database**
+
    ```bash
    alembic upgrade head
    ```
 
 6. **Run the application**
-   
+
    Start Redis (if not running):
+
    ```bash
    redis-server
    ```
-   
+
    Start Celery worker:
+
    ```bash
    celery -A app.tasks.celery_app worker --loglevel=info
    ```
-   
+
    Start Celery beat (scheduler):
+
    ```bash
    celery -A app.tasks.celery_app beat --loglevel=info
    ```
-   
+
    Start API server:
+
    ```bash
    uvicorn app.api.main:app --host 0.0.0.0 --port 8000 --reload
    ```
@@ -141,6 +150,7 @@ curl -X POST http://localhost:8000/api/actions \
 ## API Documentation
 
 Once the application is running, visit:
+
 - API Documentation: `http://localhost:8000/docs`
 - Alternative Docs: `http://localhost:8000/redoc`
 
@@ -163,6 +173,7 @@ pytest
 ```
 
 With coverage:
+
 ```bash
 pytest --cov=app --cov-report=html
 ```
@@ -178,11 +189,13 @@ flake8 app tests
 ### Database Migrations
 
 Create a new migration:
+
 ```bash
 alembic revision --autogenerate -m "Description of changes"
 ```
 
 Apply migrations:
+
 ```bash
 alembic upgrade head
 ```
@@ -207,6 +220,7 @@ giftpulse/
 ## Monitoring
 
 The application provides metrics compatible with Prometheus. Key metrics include:
+
 - Log processing rate
 - Pattern match rate
 - Action success/failure rate
