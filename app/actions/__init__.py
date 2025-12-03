@@ -1,4 +1,5 @@
 """Action handlers"""
+
 from app.actions.base import BaseActionHandler
 from app.actions.email import EmailActionHandler
 from app.actions.webhook import WebhookActionHandler

@@ -1,4 +1,5 @@
 """Pydantic schemas for monitoring rules."""
+
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, ConfigDict
@@ -9,6 +10,7 @@ from app.models.rule import PatternType
 
 class MonitoringRuleBase(BaseModel):
     """Base monitoring rule schema."""
+
     name: str
     description: Optional[str] = None
     enabled: bool = True
@@ -21,11 +23,13 @@ class MonitoringRuleBase(BaseModel):
 
 class MonitoringRuleCreate(MonitoringRuleBase):
     """Schema for creating a monitoring rule."""
+
     pass
 
 
 class MonitoringRuleUpdate(BaseModel):
     """Schema for updating a monitoring rule."""
+
     name: Optional[str] = None
     description: Optional[str] = None
     enabled: Optional[bool] = None
@@ -38,14 +42,16 @@ class MonitoringRuleUpdate(BaseModel):
 
 class MonitoringRuleResponse(MonitoringRuleBase):
     """Schema for monitoring rule response."""
+
     id: UUID
     created_at: datetime
     updated_at: datetime
-    
+
     model_config = ConfigDict(from_attributes=True)
 
 
 class MonitoringRuleListResponse(BaseModel):
     """Schema for monitoring rule list."""
+
     rules: list[MonitoringRuleResponse]
     total: int
