@@ -1,4 +1,5 @@
 """Utility functions"""
+
 from app.utils.logger import get_logger, logger
 from app.utils.helpers import (
     parse_error_codes,
