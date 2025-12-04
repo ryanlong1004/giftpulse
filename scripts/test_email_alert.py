@@ -3,6 +3,7 @@
 Test script to trigger an email alert via Mailtrap.
 This creates a test log entry that matches one of our monitoring rules.
 """
+
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -12,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 # Import after path setup
 from app.database import get_db_context  # noqa: E402
-from app.models import TwilioLog, MonitoringRule, Action  # noqa: E402
+from app.models import Log, MonitoringRule, Action  # noqa: E402
 from app.services.pattern_matcher import PatternMatcher  # noqa: E402
 from app.actions.email import EmailActionHandler  # noqa: E402
 
@@ -20,7 +21,7 @@ from app.actions.email import EmailActionHandler  # noqa: E402
 def create_test_log(db):
     """Create a test Twilio log that will trigger an alert."""
     # Create a test call log with error code that matches our rule
-    test_log = TwilioLog(
+    test_log = Log(
         twilio_sid=f"TEST_CALL_{int(datetime.utcnow().timestamp())}",
         log_type="call",
         status="failed",
@@ -31,9 +32,9 @@ def create_test_log(db):
             "direction": "outbound-api",
             "duration": "0",
             "price": "-0.00",
-            "error_message": "Queue overflow"
+            "error_message": "Queue overflow",
         },
-        created_at=datetime.utcnow()
+        created_at=datetime.utcnow(),
     )
 
     db.add(test_log)
@@ -51,10 +52,14 @@ def create_test_log(db):
 def trigger_alert(db, test_log):
     """Match the test log against rules and trigger actions."""
     # Get all enabled rules for this log type
-    rules = db.query(MonitoringRule).filter(
-        MonitoringRule.enabled.is_(True),
-        MonitoringRule.log_type == test_log.log_type
-    ).all()
+    rules = (
+        db.query(MonitoringRule)
+        .filter(
+            MonitoringRule.enabled.is_(True),
+            MonitoringRule.log_type == test_log.log_type,
+        )
+        .all()
+    )
 
     log_type = test_log.log_type
     print(f"\n🔍 Checking {len(rules)} active rules for '{log_type}' logs...")
@@ -71,10 +76,11 @@ def trigger_alert(db, test_log):
             print("   ✅ MATCH! Triggering actions...")
 
             # Get actions for this rule
-            actions = db.query(Action).filter(
-                Action.rule_id == rule.id,
-                Action.enabled.is_(True)
-            ).all()
+            actions = (
+                db.query(Action)
+                .filter(Action.rule_id == rule.id, Action.enabled.is_(True))
+                .all()
+            )
 
             print(f"   - Found {len(actions)} enabled action(s)")
 
@@ -85,7 +91,7 @@ def trigger_alert(db, test_log):
                     if action.action_type == "email":
                         email_handler = EmailActionHandler()
                         email_handler.handle(action, test_log, rule)
-                        recipients = action.config.get('recipients', [])
+                        recipients = action.config.get("recipients", [])
                         print(f"   ✅ Email sent to: {recipients}")
                         print("   📧 Check your Mailtrap inbox!")
                     else:
@@ -93,6 +99,7 @@ def trigger_alert(db, test_log):
                 except Exception as e:
                     print(f"   ❌ Error executing action: {e}")
                     import traceback
+
                     traceback.print_exc()
         else:
             print("   ❌ No match")
@@ -127,6 +134,7 @@ def main():
     except Exception as e:
         print(f"\n❌ Test failed with error: {e}")
         import traceback
+
         traceback.print_exc()
         sys.exit(1)
 
