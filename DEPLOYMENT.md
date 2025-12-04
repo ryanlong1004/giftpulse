@@ -49,9 +49,6 @@ SMTP_PORT=587
 SMTP_USERNAME=<your-smtp-username>
 SMTP_PASSWORD=<your-smtp-password>
 EMAIL_FROM=giftpulse@monitor.com
-
-# Google Chat Webhook (optional)
-GOOGLE_CHAT_WEBHOOK=<your-google-chat-webhook-url>
 ```
 
 ---
