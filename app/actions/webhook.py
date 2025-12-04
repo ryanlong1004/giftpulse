@@ -55,7 +55,7 @@ class WebhookActionHandler(BaseActionHandler):
         # If custom_data is provided, use it as the complete payload
         if custom_data:
             return custom_data
-        
+
         # Default payload with log data
         payload = {
             "log_id": str(log.id),
