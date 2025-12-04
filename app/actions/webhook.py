@@ -47,11 +47,16 @@ class WebhookActionHandler(BaseActionHandler):
 
         Args:
             log: Log data
-            custom_data: Additional custom data
+            custom_data: Additional custom data or complete payload override
 
         Returns:
             Payload dictionary
         """
+        # If custom_data is provided, use it as the complete payload
+        if custom_data:
+            return custom_data
+        
+        # Default payload with log data
         payload = {
             "log_id": str(log.id),
             "twilio_sid": log.twilio_sid,
@@ -63,9 +68,6 @@ class WebhookActionHandler(BaseActionHandler):
             "from_number": log.from_number,
             "to_number": log.to_number,
         }
-
-        if custom_data:
-            payload.update(custom_data)
 
         return payload
 
