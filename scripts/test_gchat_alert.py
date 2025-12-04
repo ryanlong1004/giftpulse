@@ -52,22 +52,30 @@ def create_test_log(db):
 
 def create_gchat_action(db, rule_id):
     """Create a Google Chat action for testing."""
+    import os
+
+    webhook_url = os.getenv("GOOGLE_CHAT_WEBHOOK")
+    if not webhook_url:
+        print("   ⚠️  GOOGLE_CHAT_WEBHOOK not set in environment!")
+        return None
+
     gchat_action = Action(
         rule_id=rule_id,
         action_type="google_chat",
         config={
+            "webhook_url": webhook_url,
             "message": "🚨 SMS Delivery Failed!\n"
             "Status: {{ status }}\n"
             "Error Code: {{ error_code }}\n"
             "From: {{ from_number }}\n"
-            "To: {{ to_number }}"
+            "To: {{ to_number }}",
         },
         enabled=True,
     )
     db.add(gchat_action)
     db.commit()
     db.refresh(gchat_action)
-    print(f"\n✅ Created Google Chat action for rule")
+    print("\n✅ Created Google Chat action for rule")
     return gchat_action
 
 
@@ -110,18 +118,23 @@ def trigger_alert(db, test_log):
 
         if not actions:
             print("   ⚠️  No Google Chat actions found, creating one...")
-            actions = [create_gchat_action(db, rule.id)]
+            new_action = create_gchat_action(db, rule.id)
+            if new_action:
+                actions = [new_action]
+            else:
+                print("   ❌ Failed to create Google Chat action")
+                return
 
         print(f"   - Found {len(actions)} Google Chat action(s)")
 
         # Execute each action
         for action in actions:
-            print(f"\n   🔔 Executing Google Chat action...")
+            print("\n   🔔 Executing Google Chat action...")
             try:
                 gchat_handler = GoogleChatActionHandler()
                 result = gchat_handler.execute(action.config, test_log)
-                print(f"   ✅ Google Chat notification sent!")
-                print(f"   📱 Check your Google Chat space!")
+                print("   ✅ Google Chat notification sent!")
+                print("   📱 Check your Google Chat space!")
                 if result:
                     print(f"   Response: {result.get('status', 'N/A')}")
             except Exception as e:

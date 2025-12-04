@@ -3,7 +3,7 @@
 Test script to trigger a webhook alert.
 This creates a test log entry and sends a webhook notification.
 """
-import os
+
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -120,17 +120,18 @@ def trigger_alert(db, test_log, webhook_url):
             try:
                 webhook_handler = WebhookActionHandler()
                 result = webhook_handler.execute(action.config, test_log)
-                
+
                 if result.get("success"):
                     print("   ✅ Webhook sent successfully!")
                     print(f"   📡 Status Code: {result.get('status_code', 'N/A')}")
                     print("   📱 Check your Google Chat space!")
                 else:
                     print(f"   ❌ Webhook failed: {result.get('error', 'Unknown')}")
-                    
+
             except Exception as e:
                 print(f"   ❌ Error executing webhook: {e}")
                 import traceback
+
                 traceback.print_exc()
     else:
         print("   ❌ No match")
@@ -138,20 +139,20 @@ def trigger_alert(db, test_log, webhook_url):
 
 def main():
     """Main test function."""
+    # Hardcoded webhook URL for testing
+    webhook_url = (
+        "https://chat.googleapis.com/v1/spaces/AAQA8c99S-4/messages?"
+        "key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&"
+        "token=HGqfJ1A19EVxEmsQ0GEBFcWwheszB8gE86ns9dqla1w"
+    )
+    
     print("=" * 60)
     print("🧪 GiftPulse Webhook Alert Test")
     print("=" * 60)
-    
-    webhook_url = os.getenv("GOOGLE_CHAT_WEBHOOK")
-    if not webhook_url:
-        print("\n❌ GOOGLE_CHAT_WEBHOOK not set in environment!")
-        print("Set it with: export GOOGLE_CHAT_WEBHOOK='your-webhook-url'\n")
-        sys.exit(1)
-    
     print("\nThis test will:")
     print("1. Create a test Twilio SMS log with failed status")
     print("2. Match it against the SMS Delivery Failure rule")
-    print("3. Send webhook notification to Google Chat")
+    print("3. Send webhook notification")
     print(f"\nWebhook URL: {webhook_url[:50]}...")
     print("\n" + "=" * 60 + "\n")
 
@@ -172,6 +173,7 @@ def main():
     except Exception as e:
         print(f"\n❌ Test failed with error: {e}")
         import traceback
+
         traceback.print_exc()
         sys.exit(1)
 
