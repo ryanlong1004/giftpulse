@@ -93,7 +93,7 @@ def trigger_alert(db, test_log):
                     if action.action_type == "email":
                         email_handler = EmailActionHandler()
                         email_handler.execute(action.config, test_log)
-                        recipients = action.config.get('recipients', [])
+                        recipients = action.config.get("recipients", [])
                         print(f"   ✅ Email sent to: {recipients}")
                         print("   📧 Check your Mailtrap inbox!")
                     else:

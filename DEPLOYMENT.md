@@ -19,6 +19,7 @@
 ## 📊 Current Configuration
 
 ### Server Details
+
 - **Provider:** DigitalOcean Droplet
 - **IP Address:** 104.131.116.144
 - **OS:** Ubuntu 24.04 LTS
@@ -26,6 +27,7 @@
 - **Cost:** $6/month
 
 ### Services Running
+
 ```
 ✅ postgres       - PostgreSQL 15 (port 5432)
 ✅ redis          - Redis 7 (port 6379)
@@ -35,6 +37,7 @@
 ```
 
 ### Environment Variables
+
 ```bash
 # Twilio Configuration
 TWILIO_ACCOUNT_SID=<your-twilio-account-sid>
@@ -56,16 +59,19 @@ GOOGLE_CHAT_WEBHOOK=<your-google-chat-webhook-url>
 ## 📋 Pre-configured Monitoring Rules
 
 ### 1. Failed Call Detection
+
 - **Type:** Error Code Pattern
 - **Monitors:** Twilio calls with error codes 30001-30005
 - **Action:** Email to ops@example.com
 
 ### 2. SMS Delivery Failure
+
 - **Type:** Status Pattern
 - **Monitors:** SMS messages with status: failed, undelivered
 - **Action:** Webhook alert
 
 ### 3. High Error Rate
+
 - **Type:** Threshold Pattern
 - **Monitors:** 10+ errors within 5 minutes
 - **Action:** Email alert to oncall@example.com
@@ -75,17 +81,20 @@ GOOGLE_CHAT_WEBHOOK=<your-google-chat-webhook-url>
 ## 🔧 Management Commands
 
 ### SSH Access
+
 ```bash
 ssh root@104.131.116.144
 cd giftpulse
 ```
 
 ### Check Service Status
+
 ```bash
 docker compose ps
 ```
 
 ### View Logs
+
 ```bash
 # All services
 docker compose logs -f
@@ -97,6 +106,7 @@ docker compose logs -f celery_beat
 ```
 
 ### Restart Services
+
 ```bash
 # All services
 docker compose restart
@@ -106,6 +116,7 @@ docker compose restart api
 ```
 
 ### Update Application
+
 ```bash
 git pull
 docker compose down
@@ -113,6 +124,7 @@ docker compose up -d
 ```
 
 ### Database Access
+
 ```bash
 # Enter PostgreSQL
 docker compose exec postgres psql -U giftpulse -d giftpulse_monitor
@@ -142,12 +154,15 @@ SELECT * FROM twilio_logs ORDER BY created_at DESC LIMIT 10;
 ## 📈 Monitoring
 
 ### Task Schedule
+
 Celery Beat polls Twilio every **5 minutes (300 seconds)** for:
+
 - New call logs
 - New message logs
 - Monitor alerts from Twilio
 
 ### Processing Flow
+
 1. **Celery Beat** triggers `poll_twilio_logs` every 5 minutes
 2. **Log Fetcher** retrieves logs from Twilio API
 3. **Pattern Matcher** checks logs against active rules
@@ -159,6 +174,7 @@ Celery Beat polls Twilio every **5 minutes (300 seconds)** for:
 ## 🔐 Next Steps (Optional)
 
 ### 1. Setup Firewall
+
 ```bash
 ufw allow 22    # SSH
 ufw allow 8000  # API
@@ -166,23 +182,27 @@ ufw enable
 ```
 
 ### 2. Configure Domain (Optional)
+
 Point your domain to `104.131.116.144` via A record:
+
 ```
 giftpulse.yourdomain.com -> 104.131.116.144
 ```
 
 ### 3. Setup HTTPS with Let's Encrypt (Optional)
+
 ```bash
 apt install certbot python3-certbot-nginx
 certbot --nginx -d giftpulse.yourdomain.com
 ```
 
 ### 4. Setup Nginx Reverse Proxy (Optional)
+
 ```nginx
 server {
     listen 80;
     server_name 104.131.116.144;
-    
+
     location / {
         proxy_pass http://localhost:8000;
         proxy_set_header Host $host;
@@ -196,6 +216,7 @@ server {
 ## 🐛 Troubleshooting
 
 ### Service Not Starting
+
 ```bash
 # Check logs for errors
 docker compose logs [service_name]
@@ -206,6 +227,7 @@ docker compose up -d
 ```
 
 ### Database Connection Issues
+
 ```bash
 # Check PostgreSQL is healthy
 docker compose exec postgres pg_isready -U giftpulse
@@ -218,6 +240,7 @@ docker compose exec api python scripts/seed_data.py
 ```
 
 ### Celery Not Processing Tasks
+
 ```bash
 # Check Celery worker logs
 docker compose logs celery_worker
