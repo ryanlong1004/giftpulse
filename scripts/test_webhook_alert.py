@@ -57,7 +57,8 @@ def create_webhook_action(db, rule_id, webhook_url):
         config={
             "url": webhook_url,
             "method": "POST",
-            "headers": {"Content-Type": "application/json"},
+            "headers": {"Content-Type": "application/json; charset=UTF-8"},
+            "data": {"text": "🚨 Twilio SMS Delivery Failed!"},
         },
         enabled=True,
     )
@@ -145,7 +146,7 @@ def main():
         "key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&"
         "token=HGqfJ1A19EVxEmsQ0GEBFcWwheszB8gE86ns9dqla1w"
     )
-    
+
     print("=" * 60)
     print("🧪 GiftPulse Webhook Alert Test")
     print("=" * 60)
