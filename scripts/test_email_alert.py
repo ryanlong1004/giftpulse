@@ -74,7 +74,7 @@ def trigger_alert(db, test_log):
         print(f"   - Pattern Value: {rule.pattern_value}")
 
         # Check if log matches the rule
-        if pattern_matcher.matches(test_log, rule):
+        if pattern_matcher.check_log_against_rule(db, test_log, rule):
             print("   ✅ MATCH! Triggering actions...")
 
             # Get actions for this rule
@@ -92,8 +92,8 @@ def trigger_alert(db, test_log):
                 try:
                     if action.action_type == "email":
                         email_handler = EmailActionHandler()
-                        email_handler.handle(action, test_log, rule)
-                        recipients = action.config.get("recipients", [])
+                        email_handler.execute(action.config, test_log)
+                        recipients = action.config.get('recipients', [])
                         print(f"   ✅ Email sent to: {recipients}")
                         print("   📧 Check your Mailtrap inbox!")
                     else:
