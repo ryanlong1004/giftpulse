@@ -20,10 +20,12 @@ from app.actions.email import EmailActionHandler  # noqa: E402
 
 def create_test_log(db):
     """Create a test Twilio log that will trigger an alert."""
+    now = datetime.utcnow()
     # Create a test call log with error code that matches our rule
     test_log = Log(
-        twilio_sid=f"TEST_CALL_{int(datetime.utcnow().timestamp())}",
+        twilio_sid=f"TEST_CALL_{int(now.timestamp())}",
         log_type="call",
+        timestamp=now,
         status="failed",
         error_code="30001",  # This matches "Failed Call Detection" rule
         from_number="+15551234567",
@@ -34,7 +36,7 @@ def create_test_log(db):
             "price": "-0.00",
             "error_message": "Queue overflow",
         },
-        created_at=datetime.utcnow(),
+        created_at=now,
     )
 
     db.add(test_log)
