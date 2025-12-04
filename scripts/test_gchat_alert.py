@@ -3,6 +3,7 @@
 Test script to trigger a Google Chat alert.
 This creates a test log entry that matches a monitoring rule with Google Chat action.
 """
+
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -12,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 # Import after path setup
 from app.database import get_db_context  # noqa: E402
-from app.models import Log, MonitoringRule, Action, ActionType  # noqa: E402
+from app.models import Log, MonitoringRule, Action  # noqa: E402
 from app.services.pattern_matcher import PatternMatcher  # noqa: E402
 from app.actions.google_chat import GoogleChatActionHandler  # noqa: E402
 
@@ -53,7 +54,7 @@ def create_gchat_action(db, rule_id):
     """Create a Google Chat action for testing."""
     gchat_action = Action(
         rule_id=rule_id,
-        action_type=ActionType.GOOGLE_CHAT,
+        action_type="google_chat",
         config={
             "message": "🚨 SMS Delivery Failed!\n"
             "Status: {{ status }}\n"
@@ -102,7 +103,7 @@ def trigger_alert(db, test_log):
             .filter(
                 Action.rule_id == rule.id,
                 Action.enabled.is_(True),
-                Action.action_type == ActionType.GOOGLE_CHAT,
+                Action.action_type == "google_chat",
             )
             .all()
         )
